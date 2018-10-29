@@ -46,8 +46,8 @@ class VenueTest < Minitest::Test
   end
 
   def test_venue_can_add_song
-    @venue1.add_song("Hello", "Lionel", "Soft Rock")
-    assert_equal("Hello", @venue1.list_songs[0].title)
+    @venue1.add_song("I Want You", "Bob Dylan", "Folk Rock")
+    assert_equal("I Want You", @venue1.list_songs[0].title)
   end
 
   def test_venue_can_add_guest
@@ -56,9 +56,9 @@ class VenueTest < Minitest::Test
   end
 
   def test_venue_can_check_in_guest_to_room
-    @venue1.add_room(@venue1.add_room("roomA", 25, 5))
+    @venue1.add_room("roomA", 25, 5)
     @venue1.add_guest("Bob", 40, @purple_haze)
-    @venue1.check_guest_into_room(venue1.rooms[0],venue1.list_guests[0])
+    @venue1.check_guest_into_room(@venue1.rooms[0], @venue1.list_guests[0])
 
     room_actual_guest = @venue1.rooms[0].get_occupants[0].name
     room_actual_till = @venue1.rooms[0].get_bar_till_balance
@@ -69,31 +69,28 @@ class VenueTest < Minitest::Test
   end
 
   def test_venue_can_check_out_guest_from_room
-    @venue1.add_room(@venue1.add_room("roomA", 25, 5))
+    @venue1.add_room("roomA", 25, 5)
     @venue1.add_guest("Bob", 40, @purple_haze)
-    @venue1.check_guest_into_room(venue1.rooms[0],venue1.list_guests[0])
-    @venue1.check_guest_out_of_room(venue1.rooms[0],venue1.list_guests[0])
+    @venue1.check_guest_into_room(@venue1.rooms[0],@venue1.list_guests[0])
+    @venue1.check_guest_out_of_room(@venue1.rooms[0],@venue1.rooms[0].get_occupants()[0])
 
-    room_actual_guest = @venue1.rooms[0].get_occupants[0].name
+    room_actual_guests = @venue1.rooms[0].get_occupants()
     room_actual_till = @venue1.rooms[0].get_bar_till_balance
-    assert_equal("Bob", room_actual_guest)
+    venue_actual_guest_name = @venue1.list_guests()[0].name
+
+    assert_equal([], room_actual_guests)
     assert_equal(5, room_actual_till)
+    assert_equal("Bob", venue_actual_guest_name)
   end
 
-  def test_venue_can_close_for_night
-    guests_rooms_actual = @rooms.reduce([]) { |all_guests, room|
-        return all_guests.concat(room.get_occupants)
-      }
-    guests_lobby_actual = @venue1.list_guests()
-    assert_equal([], guests_rooms_actual)
-    assert_equal([], guests_lobby_actual)
-  end
-
-  def test_venue_can_get_total_takings
-
-  end
-
-  def test_venue_can_get_takings_per_room
-  end
+  #
+  #
+  # def test_venue_can_get_total_takings
+  #   assert_equal(10, @venue1.total_takings())
+  # end
+  #
+  # def test_venue_can_get_takings_per_room
+  #
+  # end
 
 end

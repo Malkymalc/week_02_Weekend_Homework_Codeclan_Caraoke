@@ -1,5 +1,5 @@
+require_relative('./bar')
 require('pry')
-
 class Room
 
   attr_reader :name, :capacity, :price
